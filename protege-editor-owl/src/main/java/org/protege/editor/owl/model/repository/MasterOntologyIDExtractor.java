@@ -4,6 +4,8 @@ import com.google.common.base.Optional;
 import org.protege.editor.owl.model.repository.extractors.LastResortExtractor;
 import org.protege.editor.owl.model.repository.extractors.OntologyIdExtractor;
 import org.protege.editor.owl.model.repository.extractors.RdfXmlExtractor;
+import org.protege.editor.owl.ui.error.OntologyLoadErrorHandlerUI;
+import org.protege.editor.owl.ui.ontology.authentication.BasicAuthenticationDialog;
 import org.semanticweb.owlapi.model.OWLOntologyID;
 
 import java.net.URI;
@@ -18,6 +20,11 @@ public class MasterOntologyIDExtractor implements OntologyIdExtractor {
     public MasterOntologyIDExtractor() { 
         extractors.add(new RdfXmlExtractor());
         extractors.add(new LastResortExtractor());
+    }
+
+    public MasterOntologyIDExtractor(BasicAuthenticationDialog basicAuthenticationDialogHandler, OntologyLoadErrorHandlerUI ontologyLoadErrorHandler) {
+        extractors.add(new RdfXmlExtractor());
+        extractors.add(new LastResortExtractor(basicAuthenticationDialogHandler, ontologyLoadErrorHandler));
     }
 
     public Optional<OWLOntologyID> getOntologyId(URI location) {

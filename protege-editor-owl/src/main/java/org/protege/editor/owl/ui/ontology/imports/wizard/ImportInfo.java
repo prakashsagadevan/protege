@@ -24,6 +24,8 @@ public class ImportInfo {
 
     private IRI importLocation;
 
+    private String basicAuthentication;
+
     public OWLOntologyID getOntologyID() {
         return ontologyID;
     }
@@ -46,6 +48,14 @@ public class ImportInfo {
 
     public void setImportLocation(IRI importLocation) {
         this.importLocation = importLocation;
+    }
+
+    public String getBasicAuthentication() {
+        return basicAuthentication;
+    }
+
+    public void setBasicAuthentication(String basicAuthentication) {
+        this.basicAuthentication = basicAuthentication;
     }
 
     public boolean isReady() {

@@ -35,6 +35,8 @@ public class OntologyLoader {
 
     private final UserResolvedIRIMapper userResolvedIRIMapper;
 
+    private String authenticationValue = null;
+
     private final ProgressDialog dlg = new ProgressDialog();
 
     private final ListeningExecutorService ontologyLoadingService = MoreExecutors.listeningDecorator(
@@ -44,6 +46,12 @@ public class OntologyLoader {
     public OntologyLoader(OWLModelManager modelManager, UserResolvedIRIMapper userResolvedIRIMapper) {
         this.modelManager = modelManager;
         this.userResolvedIRIMapper = userResolvedIRIMapper;
+    }
+
+    public OntologyLoader(OWLModelManager modelManager, UserResolvedIRIMapper userResolvedIRIMapper,String authenticationValue) {
+        this.modelManager = modelManager;
+        this.userResolvedIRIMapper = userResolvedIRIMapper;
+        this.authenticationValue = authenticationValue;
     }
 
     public Optional<OWLOntology> loadOntology(URI documentUri) throws OWLOntologyCreationException {
@@ -97,6 +105,9 @@ public class OntologyLoader {
         loadingManager.addOntologyLoaderListener(new ProgressDialogOntologyLoaderListener(dlg, logger));
         OWLOntologyLoaderConfiguration configuration = new OWLOntologyLoaderConfiguration();
         configuration = configuration.setMissingImportHandlingStrategy(MissingImportHandlingStrategy.SILENT);
+        if(authenticationValue != null && !authenticationValue.isEmpty()) {
+            configuration = configuration.setAuthorizationValue(authenticationValue);
+        }
         IRIDocumentSource documentSource = new IRIDocumentSource(IRI.create(documentURI));
         OWLOntology ontology = loadingManager.loadOntologyFromOntologyDocument(documentSource, configuration);
         Set<OWLOntology> alreadyLoadedOntologies = new HashSet<>();
